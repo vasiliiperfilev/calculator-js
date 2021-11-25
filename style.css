@@ -1,0 +1,90 @@
+:root {
+    --background: #f6f6f6;
+    --font: #333;
+    --border: #444;
+    --screen: #ccf;
+    --calculator: #bbb;
+    --btn: #fff;
+    --btn-hover: #eee;
+    --btn-active: #ddd;
+    --btn-yellow: #FED2AA;
+    --btn-yellow-hover: #FFBF86;
+    --btn-red-active: #FFAA86;
+    --btn-blue: #aff;
+    --btn-blue-hover: #8df;
+    --btn-blue-active: #6bf;
+  }
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--font);
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 410px;
+    min-height: 500px;
+}
+
+button {
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    outline: none;
+  }
+
+.container {
+    background-color: var(--calculator);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 5px 5px 5px var(--border);
+}
+
+.display {
+    padding: 10px;
+    margin: 10px 10px 20px 10px;
+    background-color: var(--screen);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    text-align: right;
+}
+
+.firstLine {
+    min-height: 24px;
+    font-size: 16px;
+}
+
+.secondLine {
+    min-height: 32px;
+    font-size: 24px;
+}
+
+.buttonPad {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    gap: 5px;
+}
+
+.btn {
+    width: 90px;
+}
+
+.btn.space2 {
+    width: 185px;
+}
+
+
+
+  
