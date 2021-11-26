@@ -4,15 +4,15 @@
     --border: #444;
     --screen: #ccf;
     --calculator: #bbb;
-    --btn: #fff;
-    --btn-hover: #eee;
-    --btn-active: #ddd;
+    --btn: #eee;
+    --btn-hover: #ddd;
+    --btn-active: #ccc;
     --btn-yellow: #FED2AA;
     --btn-yellow-hover: #FFBF86;
-    --btn-red-active: #FFAA86;
-    --btn-blue: #aff;
-    --btn-blue-hover: #8df;
-    --btn-blue-active: #6bf;
+    --btn-yellow-active: #FFAA86;
+    --btn-blue: rgb(176, 231, 231);
+    --btn-blue-hover: rgb(159, 203, 219);
+    --btn-blue-active: rgb(136, 169, 194);
   }
 
 * {
@@ -30,6 +30,7 @@ body {
     align-items: center;
     min-width: 410px;
     min-height: 500px;
+    height: 100vh;
 }
 
 button {
@@ -47,25 +48,26 @@ button {
     border-radius: 10px;
     width: 400px;
     box-shadow: 5px 5px 5px var(--border);
+    padding: 20px;
 }
 
 .display {
     padding: 10px;
-    margin: 10px 10px 20px 10px;
+    margin-bottom: 20px;
     background-color: var(--screen);
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     border-radius: 5px;
     text-align: right;
 }
 
 .firstLine {
-    min-height: 24px;
-    font-size: 16px;
+    min-height: 36px;
+    font-size: 24px;
 }
 
 .secondLine {
-    min-height: 32px;
-    font-size: 24px;
+    min-height: 48px;
+    font-size: 36px;
 }
 
 .buttonPad {
@@ -73,16 +75,54 @@ button {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin: 10px;
-    gap: 5px;
+    gap: 10px;
 }
 
 .btn {
-    width: 90px;
+    width: 80px;
+    height: 70px;
+    font-size: 24px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    background-color: var(--btn);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--btn-hover);
+}
+
+.btn:active {
+    background-color: var(--btn-active);
+}
+
+.func {
+    background-color: var(--btn-blue);
+}
+
+.func:hover {
+    background-color: var(--btn-blue-hover);
+}
+
+.func:active {
+    background-color: var(--btn-blue-active);
+}
+
+.operator {
+    background-color: var(--btn-yellow);
+}
+
+.operator:hover {
+    background-color: var(--btn-yellow-hover);
+}
+
+.operator:active {
+    background-color: var(--btn-yellow-active);
 }
 
 .btn.space2 {
-    width: 185px;
+    width: 170px;
 }
 
 
