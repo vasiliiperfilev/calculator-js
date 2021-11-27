@@ -47,9 +47,12 @@ numButtons.forEach(btn => {
 //check for recent operations
 let isAfterOperation = false;
 
+//display divs
+let display = document.querySelector(".secondLine");
+let resultDisplay = document.querySelector(".firstLine");
+
 //display value
 function displayValue(){
-    let display = document.querySelector(".secondLine");
     //clear display after operation 
     if(isAfterOperation){
         display.textContent = '';
@@ -65,7 +68,7 @@ function displayValue(){
             display.textContent += '.';
         }
     }
-    else if (display.textContent === '0'){
+    else if (display.textContent === '0' || !Number(display.textContent)){
         display.textContent = this.value;
     }
     else {
@@ -86,36 +89,37 @@ let num2 = null;
 
 //when operator pressed
 function storeValues(){
-    let display = document.querySelector(".secondLine");
-    let resultDisplay = document.querySelector(".firstLine");
-    //if operator was choosen before and there are two values
+    //if operator was choosen before and there are two values: assigned and entered to display
     if (operator !== null && num1 !== null && display.textContent !== ''){
         //store num2
         num2 = Number(display.textContent);
         //perform calculations
         let result = operate(operator, num1, num2);
-        //display result on the first line
-        resultDisplay.textContent = result;
+        //rounding for decimals
+        let stringResult = String(Math.round(result * 100000) / 100000);
+        //check bool value to switch input mode in displayValue()
         isAfterOperation = true;
-        //if new operator called is '=' change values to default
-        if (this.value === '='){
+        //if operator called is '=' or result is NaN or infinity change values to default
+        if (this.value === '=' || stringResult === 'NaN' || stringResult === Infinity){
             operator = null;
-            num1 = result;
+            num1 = null;
             num2 = null;
-            display.textContent = '';
-            return;
+            display.textContent = stringResult;
+            resultDisplay.textContent = '';
         }
         //else assign new operator, result is num1, display and wait for the num2
         else {
             operator = this.value;
-            resultDisplay.textContent += operator;
+            resultDisplay.textContent = String(stringResult + operator);
             num1 = result;
             num2 = result;
-            display.textContent = result;
+            display.textContent = stringResult;
         }
     }
     //if it is first operator and num1 is not assigned and exclude equal operation
     else if (operator === null && num1 === null && this.value !== '='){
+        //if previous result displayed NaN do nothing
+        if (display.textContent === 'NaN') return;
         operator = this.value;
         num1 = Number(display.textContent);
         num2 = Number(display.textContent);
@@ -128,4 +132,33 @@ function storeValues(){
         resultDisplay.textContent += operator;
     }
 
+}
+
+//clear button event
+const clearBtn = document.querySelector("input[value = 'Clear']");
+clearBtn.addEventListener('click', clearDisplay);
+
+function clearDisplay(){
+    operator = null;
+    num1 = null;
+    num2 = null;
+    display.textContent = '0';
+    resultDisplay.textContent = '';
+}
+
+//delete character event
+const deleteBtn = document.querySelector("input[value = 'Delete']");
+deleteBtn.addEventListener('click', deleteCharacter);
+
+function deleteCharacter(){
+    let input = display.textContent;
+    if (!Number(input) || input == 'Infinity'){
+        display.textContent = '0';
+    }
+    else if (input.length > 1){
+        display.textContent = input.slice(0, display.textContent.length - 1);
+    }
+    else if (input.length === 1){
+        display.textContent = '0';
+    }
 }
