@@ -68,7 +68,7 @@ function displayValue(){
             display.textContent += '.';
         }
     }
-    else if (display.textContent === '0' || !Number(display.textContent)){
+    else if (display.textContent === '0' || display.textContent === 'NaN'){
         display.textContent = this.value;
     }
     else {
