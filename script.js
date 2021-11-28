@@ -1,3 +1,33 @@
+//current operator and nums
+let operator = null;
+let num1 = null;
+let num2 = null;
+//check for recent operations
+let isAfterOperation = false;
+//display divs
+let display = document.querySelector(".secondLine");
+let resultDisplay = document.querySelector(".firstLine");
+
+//add event listeners to nums
+const numButtons = document.querySelectorAll(".btn.num");
+numButtons.forEach(btn => {
+    btn.addEventListener('click', displayValue);
+})
+
+//add event listener to signs
+const operatorButtons = document.querySelectorAll(".btn.operator");
+operatorButtons.forEach(btn => {
+    btn.addEventListener('click', storeValues);
+})
+
+//clear button event
+const clearBtn = document.querySelector("input[value = 'Clear']");
+clearBtn.addEventListener('click', clearDisplay);
+
+//delete character event
+const deleteBtn = document.querySelector("input[value = 'Delete']");
+deleteBtn.addEventListener('click', deleteCharacter);
+
 //basic functions
 
 function add(num1, num2){
@@ -21,7 +51,6 @@ function divide(num1, num2){
     }
 }
 
-
 //perform operation
 function operate(operator, num1, num2){
     if (operator === '+'){
@@ -34,22 +63,9 @@ function operate(operator, num1, num2){
         return multiply(num1, num2)
     }
     else if(operator === '÷') {
-        return divide(num1, num2);
+        return num2 === 0 ? NaN : divide(num1, num2);
     }
 }
-
-//add event listeners to nums
-const numButtons = document.querySelectorAll(".btn.num");
-numButtons.forEach(btn => {
-    btn.addEventListener('click', displayValue);
-})
-
-//check for recent operations
-let isAfterOperation = false;
-
-//display divs
-let display = document.querySelector(".secondLine");
-let resultDisplay = document.querySelector(".firstLine");
 
 //display value
 function displayValue(){
@@ -58,17 +74,19 @@ function displayValue(){
         display.textContent = '';
         isAfterOperation = false;
     }
+    //max input length
     if(display.textContent.length === 12){
         return
     }
-    else if (this.value === '.'){
+    //dot insertion
+    if (this.value === '.'){
         if (display.textContent.split('').includes('.')){
             return
         } else {
             display.textContent += '.';
         }
     }
-    else if (display.textContent === '0' || display.textContent === 'NaN'){
+    else if (display.textContent === '0'){
         display.textContent = this.value;
     }
     else {
@@ -76,67 +94,38 @@ function displayValue(){
     }
 }
 
-//add event listener to signs
-const operatorButtons = document.querySelectorAll(".btn.operator");
-operatorButtons.forEach(btn => {
-    btn.addEventListener('click', storeValues);
-})
-
-//current operator and nums
-let operator = null;
-let num1 = null;
-let num2 = null;
-
-//when operator pressed
-function storeValues(){
-    //if operator was choosen before and there are two values: assigned and entered to display
-    if (operator !== null && num1 !== null && display.textContent !== ''){
-        //store num2
-        num2 = Number(display.textContent);
-        //perform calculations
-        let result = operate(operator, num1, num2);
-        //rounding for decimals
-        let stringResult = String(Math.round(result * 100000) / 100000);
-        //check bool value to switch input mode in displayValue()
-        isAfterOperation = true;
-        //if operator called is '=' or result is NaN or infinity change values to default
-        if (this.value === '=' || stringResult === 'NaN' || stringResult === Infinity){
-            operator = null;
-            num1 = null;
-            num2 = null;
-            display.textContent = stringResult;
-            resultDisplay.textContent = '';
-        }
-        //else assign new operator, result is num1, display and wait for the num2
-        else {
-            operator = this.value;
-            resultDisplay.textContent = String(stringResult + operator);
-            num1 = result;
-            num2 = result;
-            display.textContent = stringResult;
-        }
-    }
-    //if it is first operator and num1 is not assigned and exclude equal operation
-    else if (operator === null && num1 === null && this.value !== '='){
-        //if previous result displayed NaN do nothing
-        if (display.textContent === 'NaN') return;
-        operator = this.value;
-        num1 = Number(display.textContent);
-        num2 = Number(display.textContent);
-        isAfterOperation = true;
-        resultDisplay.textContent = String(num1 + operator);
-    }
-    //if num1 left after previous equal operation
-    else if (operator === null && this.value !== '='){
-        operator = this.value;
-        resultDisplay.textContent += operator;
-    }
-
+function storeValues() {
+    //if operator already exist perform evaluation before proceeding
+    if (operator !== null) {
+        //store for chain operations if not equal opearator and true evaluation
+        if (!evaluate() || this.value === '=') return;
+    }  
+    operator = this.value;
+    num1 = Number(display.textContent);
+    resultDisplay.textContent = String(num1 + operator);
+    isAfterOperation = true;
 }
 
-//clear button event
-const clearBtn = document.querySelector("input[value = 'Clear']");
-clearBtn.addEventListener('click', clearDisplay);
+function evaluate() {
+    num2 = Number(display.textContent);
+    let result = operate(operator, num1, num2);
+    //handling division by zero
+    if (isNaN(result)) {
+        alert("Prohibited operation")
+        clearDisplay();
+        return false;
+    };
+    //display result
+    resultDisplay.textContent = roundNumber(result);
+    display.textContent = roundNumber(result);
+    operator = null;
+    isAfterOperation = true;
+    return result;
+}
+
+function roundNumber(num){
+    return Math.round(num * 1000) / 1000;
+}
 
 function clearDisplay(){
     operator = null;
@@ -145,10 +134,6 @@ function clearDisplay(){
     display.textContent = '0';
     resultDisplay.textContent = '';
 }
-
-//delete character event
-const deleteBtn = document.querySelector("input[value = 'Delete']");
-deleteBtn.addEventListener('click', deleteCharacter);
 
 function deleteCharacter(){
     let input = display.textContent;
